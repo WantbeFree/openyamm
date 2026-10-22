@@ -152,6 +152,10 @@ function(openyamm_configure_lua)
 
         target_compile_features(openyamm_lua PUBLIC c_std_99)
 
+        if (IOS)
+            target_compile_definitions(openyamm_lua PRIVATE LUA_USE_IOS)
+        endif()
+
         if (UNIX)
             target_link_libraries(openyamm_lua PUBLIC m)
         endif()
@@ -317,6 +321,7 @@ function(openyamm_fetch_bgfx_stack)
     openyamm_patch_bgfx("${bgfxSourceDir}" bgfx-d3d11-compressed-updates)
     openyamm_patch_bgfx("${bgfxSourceDir}" bgfx-anisotropy-level)
     openyamm_patch_bgfx("${bgfxSourceDir}" bgfx-gl-msaa-depth-resolve)
+    openyamm_patch_bgfx("${bgfxSourceDir}" bgfx-metal-ios-depth-format)
 
     if (NOT TARGET openyamm_bgfx_headers)
         add_library(openyamm_bgfx_headers INTERFACE)

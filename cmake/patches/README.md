@@ -79,3 +79,11 @@ resolves colour only.
 
 `CinematicGrading` uses it to keep ambient occlusion with `video.antialiasing`: the AO passes read the resolved
 D32F depth of the multisampled world target. On other renderers AO is switched off while anti-aliasing is on.
+
+## Metal depth-stencil format on iOS
+
+`bgfx-metal-ios-depth-format.patch` asks `isDepth24Stencil8PixelFormatSupported` only on macOS. The pinned Metal
+renderer selects the D24S8 format with that query on every Apple platform, but the property is
+`API_UNAVAILABLE(ios)` in the iOS SDK, so an iPhone or iPad Metal device does not implement the selector the renderer
+sends. iOS keeps `Depth32Float_Stencil8`, the format the renderer already chose for it a few lines earlier; macOS
+behaviour is unchanged. The iOS Simulator does not show the problem: its Metal device is the Mac's GPU.
